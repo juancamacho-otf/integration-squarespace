@@ -53,7 +53,7 @@ const processSingleOrder = async (order) => {
             if (profileData) {
                 const mappedProfile = mapProfiles(profileData);
                 const contactData = mappedProfile.contact;
-                const contactProperties = Object.keys(contactData).filter(k => k !== 'temporary_id' && k !== 'transactionsSummary');
+                const contactProperties = Object.keys(contactData).filter(k =>k !== 'transactionsSummary');
 
                 const createResult = await hubspotService.createContacts(contactProperties, [contactData]);
                 hubspotContactId = createResult?.results?.[0]?.id || createResult?.id;
@@ -67,7 +67,7 @@ const processSingleOrder = async (order) => {
         const orderData = mappedOrderData.order;
         const lineItemsData = mappedOrderData.line_items;
 
-        const orderProperties = Object.keys(orderData).filter(k => k !== 'temporary_id' && k !== 'Name');
+        const orderProperties = Object.keys(orderData).filter(k =>  k !== 'Name');
         const orderResult = await hubspotService.upsertOrder({
             searchProperty: 'hs_external_order_id',
             orderObject: orderData,
@@ -84,10 +84,10 @@ const processSingleOrder = async (order) => {
             }
         }
 
-        // --- CORRECCIÓN AQUÍ: Usamos exactamente el mismo filtro de la migración ---
-        const dealProperties = Object.keys(dealData).filter(k => k !== 'temporary_id' && k !== 'payment_reference' && k !== 'hs_payment_processing_method');
+        
+        const dealProperties = Object.keys(dealData).filter(k =>  k !== 'payment_reference' && k !== 'hs_payment_processing_method');
         const dealResult = await hubspotService.upsertDeal({
-            searchProperty: 'dealname',
+            searchProperty: 'sqsp_order_id',
             dealObject: dealData,
             hubspotProperties: dealProperties,
             associations: []

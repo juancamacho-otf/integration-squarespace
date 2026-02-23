@@ -112,7 +112,7 @@ const orderSquare = {
   line_items: processedLineItems,
   deal: {
       temporary_id: order.id,
-      
+      sqsp_order_id:order.id,
       dealname: `${formattedDate} ${billing.firstName} ${billing.lastName} ${order.orderNumber}`,
       closedate: order.createdOn,
       amount: grandTotal.value ?? '',

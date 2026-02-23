@@ -79,7 +79,7 @@ const processCustomerOrders = async (contactEmail, hubspotContactId, transaction
                 orderData.payment_reference = paymentMatch.payment.payment_reference;
             }
 
-            const orderProperties = Object.keys(orderData).filter(k => k !== 'temporary_id' && k !== 'Name');
+            const orderProperties = Object.keys(orderData).filter(k =>k !== 'Name');
             const orderResult = await hubspotService.upsertOrder({
                 searchProperty: 'hs_external_order_id',
                 orderObject: orderData,
@@ -103,9 +103,9 @@ const processCustomerOrders = async (contactEmail, hubspotContactId, transaction
                 await hubspotService.createAssociationV4('contacts', hubspotContactId, 'orders', hubspotOrderId).catch(() => {});
             }
 
-            const dealProperties = Object.keys(dealData).filter(k => k !== 'temporary_id' && k !== 'payment_reference' && k !== 'hs_payment_processing_method');
+            const dealProperties = Object.keys(dealData).filter(k => k !== 'payment_reference' && k !== 'hs_payment_processing_method');
             const dealResult = await hubspotService.upsertDeal({
-                searchProperty: 'dealname',
+                searchProperty: 'sqsp_order_id',
                 dealObject: dealData,
                 hubspotProperties: dealProperties,
                 associations: []
@@ -147,7 +147,7 @@ const processSingleContact = async (item) => {
 
     try {
         const contactData = item.contact;
-        const contactProperties = Object.keys(contactData).filter(key => key !== 'temporary_id' && key !== 'transactionsSummary');
+        const contactProperties = Object.keys(contactData).filter(key =>  key !== 'transactionsSummary');
         
         const contactResult = await hubspotService.upsertContact({
             searchProperty: 'email',
