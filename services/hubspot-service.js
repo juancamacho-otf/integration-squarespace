@@ -564,6 +564,7 @@ const searchCustomObjectsbyCustomId = async (
 const upsertContact = async ({
   searchProperty,
   contactObject,
+  defaultContactAddress,
   hubspotProperties,
   secondarySearchProperty,
 }) => {
@@ -603,8 +604,12 @@ const upsertContact = async ({
     console.log("this is the update result for contact");
     return updateResult;
   } else {
-    const createResult = await createContacts(hubspotProperties, [
-      contactObject,
+    const createProperties = Object.keys(defaultContactAddress)
+    .filter(key => key !== "transactionsSummary");
+
+    const createResult = await createContacts(createProperties, [
+      defaultContactAddress,
+
     ]);
     console.log("this is the create result for contact");
     return createResult;

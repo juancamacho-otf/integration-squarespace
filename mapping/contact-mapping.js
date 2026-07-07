@@ -13,7 +13,7 @@ const mapProfiles = (profile) => {
       sqsp_billing_name: `${profile.firstName} ${profile.lastName}`,
       iscustomer: profile.isCustomer,
       sqsp_billing_address: addressData.address1 ?? '',
-      sqsp_billing_address_line_2: addressData.address2 ?? '',
+      sqsp_billing_address__line_2_: addressData.address2 ?? '',
       sqsp_billing_city: addressData.city ?? '',
       sqsp_billing_state_region: addressData.state ?? '',
       sqsp_billing_country: addressData.countryCode ?? '',
@@ -24,6 +24,28 @@ const mapProfiles = (profile) => {
       last_order_submitted_on: transactions.lastOrderSubmittedOn ? new Date(transactions.lastOrderSubmittedOn).getTime() : null,
       transactionsSummary: transactions
     },
+    defaultContactAddress:{
+      temporary_id: profile.id,
+      firstname: profile.firstName,
+      lastname: profile.lastName,
+      email: profile.email,
+      sqsp_created_on: profile.createdOn ? new Date(profile.createdOn).getTime() : null,
+      sqsp_billing_name: `${profile.firstName} ${profile.lastName}`,
+      iscustomer: profile.isCustomer,
+      address: addressData.address1 ?? '',
+      street_address__line_2_: addressData.address2 ?? '',
+      city: addressData.city ?? '',
+      state: addressData.state ?? '',
+      country: addressData.countryCode ?? '',
+      phone: addressData.phone ?? '',
+      zip: addressData.postalCode ?? '',
+      
+      first_order_submitted_on: transactions.firstOrderSubmittedOn ? new Date(transactions.firstOrderSubmittedOn).getTime() : null,
+      last_order_submitted_on: transactions.lastOrderSubmittedOn ? new Date(transactions.lastOrderSubmittedOn).getTime() : null,
+      transactionsSummary: transactions
+    }
+
+
   };
   return profileSquare;
 };

@@ -193,11 +193,13 @@ const processContactsBatch = async (hubspotContacts) => {
 
         try {
             const contactData = item.contact;
+            const contactDataDefault = item.defaultContactAddress;
             const contactProperties = Object.keys(contactData).filter(key => key !== 'transactionsSummary');
             
             const contactResult = await hubspotService.upsertContact({
                 searchProperty: 'email',
                 contactObject: contactData,
+                defaultContactAddress: contactDataDefault,
                 hubspotProperties: contactProperties
             });
             
@@ -217,6 +219,7 @@ const processContactsBatch = async (hubspotContacts) => {
 
         } catch (error) {
             logger.error(`Contact Logic Error: ${contactEmail} | ${error.message}`);
+
         }
     }
     

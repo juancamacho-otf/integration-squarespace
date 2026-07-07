@@ -15,7 +15,7 @@ app.use("/api", require("./routes/api.route"));
 app.use((req, res, next) => {
   next(createError.NotFound());
 });
-
+require("dotenv").config();
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.send({
@@ -27,7 +27,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
-  console.log(`🚀 Server running in port:${PORT}`);
+  console.log(`Server running in port:${PORT}`);
 
   await integrationService.initializeCheckpoint();
 
