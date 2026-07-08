@@ -121,8 +121,7 @@ const orderSquare = {
       shipping_cost: firstShippingLine.amount?.value ?? '',
       tax: taxTotal.value ?? '',
       refund_amount: refundedTotal.value ?? '',
-      hs_shipping_cost: firstShippingLine.amount?.value ?? '',
-      hs_refund_amount: refundedTotal.value ?? '',
+      
   }
 };
 
