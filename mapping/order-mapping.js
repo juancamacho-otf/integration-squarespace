@@ -50,7 +50,7 @@ if (refundVal >= totalVal && totalVal > 0) {
         price: unitPrice.value ?? '',
         quantity: item.quantity ?? '',
         hs_sku: item.sku ?? '',
-        sqsp_lineitm_variant: variantString,
+        sqsp_lineitem_variant: variantString,
         sqsp_lineitem_fulfillment_status: item.fulfillmentStatus ?? order.fulfillmentStatus ?? '', 
         
         
