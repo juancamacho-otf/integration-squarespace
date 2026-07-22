@@ -60,7 +60,7 @@ if (refundVal >= totalVal && totalVal > 0) {
 
 const orderSquare = {
   order: {
-    temporary_id: order.id,
+    sqsp_temporary_id: order.id,
     hs_order_name: `SQSP-${order.orderNumber}`,
     hs_external_order_id: order.orderNumber,
     hs_billing_address_email: order.customerEmail,
