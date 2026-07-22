@@ -83,9 +83,7 @@ const orderSquare = {
     sqsp_fulfilled_at: firstFulfillment.shipDate ?? '',
     sqsp_paid_at: order.createdOn ?? '',
 
-    channel_type: order.channel ?? '',
-    channel_name: order.channelName ?? '',
-    channel_order_number: order.id ?? '',
+    
 
     sqsp_private_notes: notesString,
     checkout_form_note_additional_info: noteItem?.value ?? '',
