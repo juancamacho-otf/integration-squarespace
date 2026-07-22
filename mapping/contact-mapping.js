@@ -22,7 +22,7 @@ const mapProfiles = (profile) => {
       
       first_order_submitted_on: transactions.firstOrderSubmittedOn ? new Date(transactions.firstOrderSubmittedOn).getTime() : null,
       last_order_submitted_on: transactions.lastOrderSubmittedOn ? new Date(transactions.lastOrderSubmittedOn).getTime() : null,
-      transactionsSummary: transactions
+      transactionssummary: transactions
     },
     defaultContactAddress:{
       temporary_id: profile.id,
