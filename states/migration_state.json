@@ -1,12 +1,3 @@
 {
-  "last_processed_timestamp": 1783449724602,
-  "last_run_date": "2026-07-07T19:03:24.240Z",
-  "status": "COMPLETED",
-  "error_message": null,
-  "cursor": null,
-  "last_processed_email": "green88andfam@yahoo.com",
-  "last_processed_date": 1764630348494,
-  "total_processed": 1005,
-  "message": "Target Date Reached (2025-12-01T00:00:00.000Z)",
-  "last_order_sync_timestamp": 1783450976056
+
 }
