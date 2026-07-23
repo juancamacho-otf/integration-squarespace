@@ -61,6 +61,10 @@ if (refundVal >= totalVal && totalVal > 0) {
 const orderSquare = {
   order: {
     sqsp_temporary_id: order.id,
+    
+    hs_pipeline: config.hubspot.orders.pipelineId,
+    hs_pipeline_stage: config.hubspot.orders.stageId,
+
     hs_order_name: `SQSP-${order.orderNumber}`,
     hs_external_order_id: order.orderNumber,
     hs_billing_address_email: order.customerEmail,
@@ -114,8 +118,8 @@ const orderSquare = {
       dealname: `${formattedDate} ${billing.firstName} ${billing.lastName} ${order.orderNumber}`,
       closedate: order.createdOn,
       amount: grandTotal.value ?? '',
-      pipeline: config.hubspot.pipelineId, 
-      dealstage: config.hubspot.stages.checkout_completed, 
+      pipeline: config.hubspot.deals.pipelineId, 
+      dealstage: config.hubspot.deals.stageId, 
       shipping_cost: firstShippingLine.amount?.value ?? '',
       tax: taxTotal.value ?? '',
       refund_amount: refundedTotal.value ?? '',
