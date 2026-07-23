@@ -5,14 +5,19 @@ const config = {
         apiKey: process.env.SQUARESPACE_API_KEY,
     },
 
-    hubspot: {
-        accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-        pipelineId: process.env.HUBSPOT_PIPELINE_ID || "859687248",
-        
-        stages: {
-            checkout_completed: process.env.HUBSPOT_STAGE_WON || "1283053947"
-        }
+ hubspot: {
+    accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+
+    deals: {
+        pipelineId: process.env.HUBSPOT_PIPELINE_ID,
+        stageId: process.env.HUBSPOT_STAGE_WON
     },
+
+    orders: {
+        pipelineId: process.env.HUBSPOT_ORDER_PIPELINE_ID,
+        stageId: process.env.HUBSPOT_ORDER_STAGE_ID
+    }
+},
 
     throttling: process.env.THROTTLING_SERVICE === "true",
 
