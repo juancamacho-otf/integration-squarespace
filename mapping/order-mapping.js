@@ -87,7 +87,7 @@ const orderSquare = {
 
     sqsp_private_notes: notesString,
     checkout_form_note_additional_info: noteItem?.value ?? '',
-    sqsp_checkout_form_checkbox: checkItem?.value ?? '',
+    sqsp_checkout__form_checkbox: checkItem?.value ?? '',
 
     hs_billing_address_name: formatName(billing.firstName, billing.lastName),
     hs_billing_address_street: billing.address1 ?? '',
