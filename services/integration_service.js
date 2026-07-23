@@ -93,14 +93,7 @@ const processCustomerOrders = async (contactEmail, hubspotContactId, transaction
             const orderObj = orderResult?.results?.[0] || orderResult;
             const hubspotOrderId = orderObj?.id;
 
-            let isNewOrder = false;
-            if (orderObj?.createdAt && orderObj?.updatedAt) {
-                const createdTime = new Date(orderObj.createdAt).getTime();
-                const updatedTime = new Date(orderObj.updatedAt).getTime();
-                isNewOrder = Math.abs(updatedTime - createdTime) < 2000;
-            } else if (orderObj?.createdAt && !orderObj?.updatedAt) {
-                isNewOrder = true;
-            }
+    
 
             if (hubspotOrderId) {
                 try {
@@ -136,13 +129,24 @@ const processCustomerOrders = async (contactEmail, hubspotContactId, transaction
                 }
             }
 
-            if (isNewOrder && lineItemsData && lineItemsData.length > 0 && hubspotOrderId) {
-                const lineItemAssociations = [{ to: { id: hubspotOrderId }, types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 514 }] }];
-                const lineItemProps = ["name", "price", "quantity", "hs_sku", "sqsp_lineitm_variant"];
+            if (lineItemsData && lineItemsData.length > 0 && hubspotOrderId) {
                 try {
-                    await hubspotService.createLineItems({ propertiesArr: lineItemProps, lineItemArr: lineItemsData, associationsArr: lineItemAssociations });
+                    
+                    await hubspotService.deleteOrderLineItems({ orderId: hubspotOrderId });
+            
+                    const lineItemAssociations = [{
+                        to: { id: hubspotOrderId },
+                        types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 514 }]
+                    }];
+                    const lineItemProps = ["name", "price", "quantity", "hs_sku", "sqsp_lineitm_variant"];
+            
+                    await hubspotService.createLineItems({
+                        propertiesArr: lineItemProps,
+                        lineItemArr: lineItemsData,
+                        associationsArr: lineItemAssociations
+                    });
                 } catch (err) {
-                    logger.error(`Failed to create line items for Order ${hubspotOrderId}: ${err.message}`);
+                    logger.error(`Failed to recreate line items for Order ${hubspotOrderId}: ${err.message}`);
                 }
             }
 
