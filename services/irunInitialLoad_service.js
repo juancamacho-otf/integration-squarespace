@@ -85,14 +85,7 @@ try {
     const orderObj = orderResult?.results?.[0] || orderResult;
     const hubspotOrderId = orderObj?.id;
 
-    let isNewOrder = false;
-    if (orderObj?.createdAt && orderObj?.updatedAt) {
-        const createdTime = new Date(orderObj.createdAt).getTime();
-        const updatedTime = new Date(orderObj.updatedAt).getTime();
-        isNewOrder = Math.abs(updatedTime - createdTime) < 2000;
-    } else if (orderObj?.createdAt && !orderObj?.updatedAt) {
-        isNewOrder = true;
-    }
+
 
     if (hubspotOrderId) {
         await hubspotService.createAssociationV4('contacts', hubspotContactId, 'orders', hubspotOrderId).catch(() => {});
@@ -112,11 +105,26 @@ try {
         if (hubspotOrderId) await hubspotService.createAssociationV4('orders', hubspotOrderId, 'deals', hubspotDealId).catch(() => {});
     }
 
-    if (isNewOrder && lineItemsData && lineItemsData.length > 0 && hubspotOrderId) {
-        const lineItemAssociations = [{ to: { id: hubspotOrderId }, types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 514 }] }];
+   if (lineItemsData && lineItemsData.length > 0 && hubspotOrderId) {
+    try {
+        // Borra los line items existentes de la Order antes de recrearlos
+        await hubspotService.deleteOrderLineItems({ orderId: hubspotOrderId });
+
+        const lineItemAssociations = [{
+            to: { id: hubspotOrderId },
+            types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 514 }]
+        }];
         const lineItemProps = ["name", "price", "quantity", "hs_sku", "sqsp_lineitm_variant"];
-        await hubspotService.createLineItems({ propertiesArr: lineItemProps, lineItemArr: lineItemsData, associationsArr: lineItemAssociations }).catch(() => {});
+
+        await hubspotService.createLineItems({
+            propertiesArr: lineItemProps,
+            lineItemArr: lineItemsData,
+            associationsArr: lineItemAssociations
+        });
+    } catch (err) {
+        logger.error(`Failed to recreate line items for Order ${hubspotOrderId}: ${err.message}`);
     }
+}
 
 } catch (err) {
     logger.error(`Migration Order Error: ${contactEmail} | ${err.message}`);
