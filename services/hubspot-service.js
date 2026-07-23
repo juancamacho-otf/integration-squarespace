@@ -68,7 +68,41 @@ const deleteLineItems = async ({ dealId }) => {
 
   return true;
 };
+const deleteOrderLineItems = async ({ orderId }) => {
+  const associationResponse =
+    await requestService.makeHubspotRequestWithExponentialRetries({
+      hubspotClient,
+      requestFunctionRoute: ["crm", "associations", "batchApi", "read"],
+      requestFunctionParam: [
+        "orders",
+        "line_items",
+        {
+          inputs: [{ id: orderId }],
+        },
+      ],
+    });
 
+  const lineItemIdArr =
+    associationResponse.results?.[0]?.to?.map(({ id }) => ({ id })) || [];
+
+  console.log(`Order ${orderId} has ${lineItemIdArr.length} line items.`);
+
+  if (lineItemIdArr.length === 0) {
+    return true;
+  }
+
+  await requestService.makeHubspotRequestWithExponentialRetries({
+    hubspotClient,
+    requestFunctionRoute: ["crm", "lineItems", "batchApi", "archive"],
+    requestFunctionParam: [
+      {
+        inputs: lineItemIdArr,
+      },
+    ],
+  });
+
+  return true;
+};
 const delayForRateLimit = async () => {
   await new Promise((resolve) => setTimeout(resolve, minTimeBetweenRequests));
 };
@@ -973,6 +1007,7 @@ module.exports = {
   searchDealsbyCustomId,
   createLineItems,
   deleteLineItems,
+  deleteOrderLineItems,
   deleteObject,
   getDealsByStage,
   getAllUsers,
